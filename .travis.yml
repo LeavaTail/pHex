@@ -1,0 +1,10 @@
+language: c
+compiler:
+- gcc
+script:
+- "script/bootstrap.sh"
+- "./configure && make check"
+- "gcov src/main.c"
+- "gcov src/print.c"
+after_success:
+- bash <(curl -s https://codecov.io/bash)
