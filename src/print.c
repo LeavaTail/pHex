@@ -17,7 +17,7 @@
  *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -31,19 +31,21 @@
 
 #include "print.h"
 
-/*
- * printmsg: print message
- *   data: printed data
- *   len:  data length
+/**
+ * printmsg - print message
+ * @data: printed data
+ * @len:  data length
+ *
+ * Rerutn - Count of printed out line.
  */
 int printmsg(char *data, size_t len)
 {
 	int i;
 	FILE *out = stdout;
-	char ascii[1 +1] = "\0";
-	char msg[MSGLINE+1]  = "\0";
-	char hex[HEXLINE+1]  = "\0";
-	char dump[DUMPLINE+1]= "\0";
+	char ascii[1 + 1] = "\0";
+	char msg[MSGLINE + 1]  = "\0";
+	char hex[HEXLINE + 1]  = "\0";
+	char dump[DUMPLINE + 1]= "\0";
 
 	static int count;
 
@@ -53,9 +55,9 @@ int printmsg(char *data, size_t len)
 	atoh(data, hex, BUFSIZE, HEXLINE);
 	delimiter(hex, HEXLINE, DELIMCHAR);
 
-	for(i = 0; (i < len) && data[i]; i++){
+	for (i = 0; (i < len) && data[i]; i++) {
 		/* ASCII case */
-		if((data[i] < ASCIIFROM) || (data[i] > ASCIITO))
+		if ((data[i] < ASCIIFROM) || (data[i] > ASCIITO))
 			data[i] = '.';
 		sprintf(ascii, "%c", data[i]);
 		strcat(dump, ascii);
@@ -67,5 +69,3 @@ int printmsg(char *data, size_t len)
 	fprintf(out, "%s\n", msg);
 	return count;
 }
-
-

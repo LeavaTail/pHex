@@ -17,7 +17,7 @@
  *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -36,13 +36,10 @@
 
 #include "print.h"
 
-static int count;
-
-/*
- * main()
- * 
- * argc: 
- * argv:
+/**
+ * main - make a hexdump or do the reverse
+ * @argc: count of arguments
+ * @argv: command line argument vector
  */
 int main(int argc, char *argv[])
 {
@@ -50,31 +47,30 @@ int main(int argc, char *argv[])
 	bool infile = false;
 	int fd = 0;
 	size_t len;
-	char data[BUFSIZE+1];
-	
-	count = 0;
-	/*
+	char data[BUFSIZE + 1];
+
+	/**
 	 * Initialize Phase.
 	 * parse option, argument. set flags.
 	 */
-	while((opt = getopt(argc, argv, "abc:g:iEpul:s:r")) != -1) {
-		switch(opt) {
-			case 'a':
-			case 'b':
-			case 'c':
-			case 'g':
-			case 'i':
-			case 'E':
-			case 'p':
-			case 'u':
-			case 'l':
-			case 's':
-			case 'r':
-			default:
-				break;
+	while ((opt = getopt(argc, argv, "abc:g:iEpul:s:r")) != -1) {
+		switch (opt) {
+		case 'a':
+		case 'b':
+		case 'c':
+		case 'g':
+		case 'i':
+		case 'E':
+		case 'p':
+		case 'u':
+		case 'l':
+		case 's':
+		case 'r':
+		default:
+			break;
 		}
 	}
-	if(argc > optind) {
+	if (argc > optind) {
 		infile = true;
 		if ((fd = open(argv[optind], O_RDONLY)) == -1) {
 			perror("file open error");
@@ -82,7 +78,7 @@ int main(int argc, char *argv[])
 		}
 	}
 
-	/*
+	/**
 	 * Main Phase.
 	 * read input file(or stdio), output data.
 	 */
@@ -91,12 +87,10 @@ int main(int argc, char *argv[])
 		printmsg(data, len);
 	}
 
-	/*
+	/**
 	 * Terminate Phase
-	 *
 	 */
-	if(infile) {
+	if (infile)
 		close(fd);
-	}
 	return 0;
 }
