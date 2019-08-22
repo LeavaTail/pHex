@@ -4,3 +4,6 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/92896c427d5e4520863485ce76dfa791)](https://www.codacy.com/app/LeavaTail/pHex?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=LeavaTail/pHex&amp;utm_campaign=Badge_Grade)
 
 16進数で表示するコマンドpHex
+
+## Description
+`pHex`コマンドは16進ダンプを出力する
