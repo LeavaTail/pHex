@@ -4,7 +4,7 @@ AM_CXXFLAGS = $(CFLAGS)
 
 bin_PROGRAMS = phex
 phex_SOURCES = src/main.c src/print.c src/hex.c src/string.c
-phex_CLAGSS = -O0
+phex_CFLAGS = -O0 -g -coverage -Wall
 EXTRA_DIST = docs man
 
 TESTS = tests/simple.sh tests/complex.sh tests/error.sh
