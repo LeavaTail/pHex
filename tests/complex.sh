@@ -1,3 +1,3 @@
 #!/bin/sh
 
-./phex COPYING
+./phex LICENSE
