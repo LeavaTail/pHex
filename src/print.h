@@ -1,10 +1,37 @@
 #ifndef _PRINT_H
 #define _PRINT_H
 
+/**
+ * Program Name, version, author.
+ * displayed when 'usage' and 'version'
+ */
+#define PROGRAM_NAME	"phex"
+#define PROGRAM_VERSION	"0.1"
+#define PROGRAM_AUTHOR	"LeavaTail"
+#define COPYRIGHT_YEAR	"2019"
+/**
+ * Debug code
+ */
+#ifdef PHEX_DEBUG
+#define phex_debug(fmt, ...)						\
+	do {								\
+		fprintf( stderr, "(%s: %u): %s:" fmt, \
+				__FILE__, __LINE__, __func__, ##__VA_ARGS__); \
+	} while (0)
+#else
+#define phex_debug(fmt, ...)	do { } while (0)
+#endif
+
+/**
+ * ASCII information
+ */
 #define ASCIIBYTES 2
 #define ASCIIFROM 0x21
 #define ASCIITO   0x7e
 
+/**
+ * Output area (buffer size)
+ */
 #define BUFSIZE 16
 #define LINESIZE 6
 #define HEXSIZE 4
