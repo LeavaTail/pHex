@@ -23,6 +23,15 @@
 #endif
 
 /**
+ * ERROR STATUS CODE
+ *  1: invalid command-line option
+ */
+enum
+{
+	CMDLINE_FAILURE = 1
+};
+
+/**
  * ASCII information
  */
 #define ASCIIBYTES 2
