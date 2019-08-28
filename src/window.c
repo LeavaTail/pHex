@@ -34,7 +34,7 @@
 
 /**
  * get_winwidth - Get windows width
- * 
+ *
  * Return - Window width
  */
 unsigned short get_winwidth(void) {
@@ -46,7 +46,7 @@ unsigned short get_winwidth(void) {
 
 /**
  * get_winheight - Get windows height
- * 
+ *
  * Return - Window height
  */
 unsigned short get_winheight(void) {
