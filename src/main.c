@@ -40,6 +40,21 @@
 #include "print.h"
 
 /**
+ * PRINT MODE
+ * command mode(stdin mode, file input mode, dump save mode)
+ */
+static enum
+{
+	/* no argument("phex"). STDIN as input. */
+	PHEX_STDINMODE,
+	/* one argument("phex FILE"). FILE as input */
+	PHEX_FILEMODE,
+	/* two argument("phex FILE1 FILE2") FILE1'dump store FILE2 */
+	PHEX_DUMPMODE
+} phex_mode;
+
+
+/**
  * Special Option(no short option)
  */
 enum
@@ -91,6 +106,41 @@ void version(const char *command_name, const char *version,
 	fprintf(out, "Written by %s.\n", author);
 }
 
+/**
+ * read_stdin - read stdin to output Hexadecimal.
+ *
+ * Return: 0 - success
+ *         otherwise - error(show ERROR STATUS CODE)
+ */
+int read_stdin(void)
+{
+	FILE *in = stdin;
+	FILE *f2;
+
+	return 0;
+}
+
+/**
+ * read_file - read file to output Hexadecimal.
+ *
+ * Return: 0 - success
+ *         otherwise - error(show ERROR STATUS CODE)
+ */
+int read_file()
+{
+	return 0;
+}
+
+/**
+ * dump_file - read file to output another file.
+ *
+ * Return: 0 - success
+ *         otherwise - error(show ERROR STATUS CODE)
+ */
+int dump_file()
+{
+	return 0;
+}
 
 /**
  * main - make a hexdump or do the reverse
@@ -101,6 +151,7 @@ int main(int argc, char *argv[])
 {
 	int opt;
 	int longindex;
+	int n_files;
 	bool infile = false;
 	int fd = 0;
 	size_t len;
@@ -136,6 +187,25 @@ int main(int argc, char *argv[])
 			usage(CMDLINE_FAILURE);
 		}
 	}
+
+	n_files = argc - optind;
+	switch (n_files) {
+	case 0:
+		phex_mode = PHEX_STDINMODE;
+		read_stdin();
+		break;
+	case 1:
+		phex_mode = PHEX_FILEMODE;
+		read_file();
+		break;
+	case 2:
+		phex_mode = PHEX_DUMPMODE;
+		dump_file();
+		break;
+	default:
+		usage(CMDLINE_FAILURE);
+	}
+
 	if (argc > optind) {
 		infile = true;
 		if ((fd = open(argv[optind], O_RDONLY)) == -1) {
