@@ -126,9 +126,47 @@ int read_stdin(void)
  * Return: 0 - success
  *         otherwise - error(show ERROR STATUS CODE)
  */
-int read_file()
+int read_file(const char *path)
 {
-	return 0;
+	int err;
+	char *inbuf;
+	FILE *fin;
+	FILE *fout;
+	struct stat st;
+	size_t outsize;
+	size_t insize;
+
+	if(stat(path, &st)) {
+		perror("file doesn't get status.");
+		err = EXIT_FAILURE;
+		goto out;
+	}
+	insize = st.st_size;
+
+	if ((fin = fopen(path, "rb")) == NULL) {
+		perror("file open error");
+		err = EXIT_FAILURE;
+		goto out;
+	}
+
+	if(fstat(STDOUT_FILENO, &st)) {
+		perror("file doesn't get status.");
+		err = EXIT_FAILURE;
+		goto fin_end;
+	}
+	outsize = st.st_size;
+
+	if ((fin = fopen(path, "rb")) == NULL) {
+		perror("file open error");
+		err = EXIT_FAILURE;
+		goto fin_end;
+	}
+fout_end:
+	fclose(fout);
+fin_end:
+	fclose(fin);
+out:
+	return err;
 }
 
 /**
@@ -137,7 +175,7 @@ int read_file()
  * Return: 0 - success
  *         otherwise - error(show ERROR STATUS CODE)
  */
-int dump_file()
+int dump_file(const char *inpath, const char *outpath)
 {
 	return 0;
 }
@@ -196,11 +234,11 @@ int main(int argc, char *argv[])
 		break;
 	case 1:
 		phex_mode = PHEX_FILEMODE;
-		read_file();
+		read_file(argv[optind]);
 		break;
 	case 2:
 		phex_mode = PHEX_DUMPMODE;
-		dump_file();
+		dump_file(argv[optind], argv[optind + 1]);
 		break;
 	default:
 		usage(CMDLINE_FAILURE);
