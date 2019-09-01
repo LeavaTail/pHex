@@ -39,6 +39,8 @@
 
 #include "print.h"
 
+size_t max(size_t a, size_t b) { return a > b ? a : b; }
+
 /**
  * PRINT MODE
  * command mode(stdin mode, file input mode, dump save mode)
@@ -135,6 +137,7 @@ int read_file(const char *path)
 	struct stat st;
 	size_t outsize;
 	size_t insize;
+	long size = sysconf(_SC_PAGESIZE);
 
 	if(stat(path, &st)) {
 		perror("file doesn't get status.");
@@ -142,7 +145,7 @@ int read_file(const char *path)
 		goto out;
 	}
 	insize = st.st_size;
-
+	insize = max(insize, size);
 	if ((fin = fopen(path, "rb")) == NULL) {
 		perror("file open error");
 		err = EXIT_FAILURE;
@@ -156,13 +159,19 @@ int read_file(const char *path)
 	}
 	outsize = st.st_size;
 
-	if ((fin = fopen(path, "rb")) == NULL) {
-		perror("file open error");
-		err = EXIT_FAILURE;
-		goto fin_end;
+	fout = stdout;
+
+	inbuf = malloc(insize * sizeof(*inbuf));
+	if (!inbuf) {
+		goto fout_end;
 	}
+
+	while (fgets(inbuf, insize - 1, fin)) {
+		puts(inbuf);
+	}
+
+	free(inbuf);
 fout_end:
-	fclose(fout);
 fin_end:
 	fclose(fin);
 out:
@@ -244,27 +253,17 @@ int main(int argc, char *argv[])
 		usage(CMDLINE_FAILURE);
 	}
 
-	if (argc > optind) {
-		infile = true;
-		if ((fd = open(argv[optind], O_RDONLY)) == -1) {
-			perror("file open error");
-			exit(EXIT_FAILURE);
-		}
-	}
-
 	/**
 	 * Main Phase.
 	 * read input file(or stdio), output data.
-	 */
 	while ((len = read(fd, data, BUFSIZE)) > 0) {
 		data[len] = '\0';
 		printmsg(data, len);
 	}
 
-	/**
 	 * Terminate Phase
-	 */
 	if (infile)
 		close(fd);
+	*/
 	return 0;
 }
