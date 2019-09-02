@@ -34,12 +34,14 @@
 #include <limits.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <string.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 
 #include "print.h"
 
 size_t max(size_t a, size_t b) { return a > b ? a : b; }
+size_t min(size_t a, size_t b) { return a < b ? a : b; }
 
 /**
  * PRINT MODE
@@ -138,6 +140,7 @@ int read_file(const char *path)
 	size_t outsize;
 	size_t insize;
 	long size = sysconf(_SC_PAGESIZE);
+	size_t offset;
 
 	if(stat(path, &st)) {
 		perror("file doesn't get status.");
@@ -145,7 +148,8 @@ int read_file(const char *path)
 		goto out;
 	}
 	insize = st.st_size;
-	insize = max(insize, size);
+	size = min(size, insize);
+
 	if ((fin = fopen(path, "rb")) == NULL) {
 		perror("file open error");
 		err = EXIT_FAILURE;
@@ -166,8 +170,12 @@ int read_file(const char *path)
 		goto fout_end;
 	}
 
-	while (fgets(inbuf, insize - 1, fin)) {
-		puts(inbuf);
+	while (fgets(inbuf, size + 1, fin)) {
+		for (offset = 0; offset < size - 1; offset += BUFSIZE) {
+		char data[BUFSIZE + 1];
+		strncpy(data, inbuf + offset, BUFSIZE);
+		printmsg(data, BUFSIZE);
+		}
 	}
 
 	free(inbuf);
